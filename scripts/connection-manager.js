@@ -11,7 +11,21 @@ class ConnectionManager
         this.conn.addEventListener('open', () => {
             console.log('Connection established');
 
-            this.conn.send('create-session');
+            this.send({
+                type: 'create-session',
+            });
         });
+
+        this.conn.addEventListener('message', event => {
+            console.log('Received message', event.data);
+            //this.receive(event.data);
+        });
+    }
+
+    send(data) 
+    {
+        const msg = JSON.stringify(data);
+        console.log('Sending message', msg);
+        this.conn.send(msg);
     }
 }
