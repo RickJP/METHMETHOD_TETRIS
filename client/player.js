@@ -23,16 +23,18 @@ class Player {
     drop() 
     {
         this.pos.y++;
-
+        this.dropCounter = 0;
+        
         if (this.arena.collide(this)) {
             this.pos.y--;
             this.arena.merge(this);
             this.reset();
             this.score += this.arena.sweep();
-
             this.events.emit('score', this.score);
+            return;
         }
-        this.dropCounter = 0;
+        this.events.emit('pos', this.pos);
+        
     }
 
 
@@ -87,7 +89,9 @@ class Player {
         this.pos.x += dir;
             if (this.arena.collide(this)) {
                 this.pos.x -= dir;
+                return;
             }
+        this.events.emit('pos', this.pos);
     }
 
 
