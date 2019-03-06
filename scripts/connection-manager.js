@@ -47,6 +47,13 @@ class ConnectionManager
                 const tetris = this.tetrisManager.createPlayer();
                 this.peers.set(id, tetris);
             }
+        });
+
+        [...this.peers.entries()].forEach(([id, tetris]) => {
+            if (clients.indexOf(id) === -1) {
+                this.tetrisManager.removePlayer(tetris);
+                this.peers.delete(id);
+            }
         })
     }
 
