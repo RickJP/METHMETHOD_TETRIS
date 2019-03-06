@@ -1,9 +1,12 @@
 class ConnectionManager 
 {
-    constructor() {
+    constructor(tetrisManager) {
         this.conn = null;
-    }
+        this.peers = new Map;
 
+        this.tetrisManager = tetrisManager;
+    }
+ 
     connect(address)
     {
         this.conn = new WebSocket(address);
@@ -35,12 +38,26 @@ class ConnectionManager
         }
     }
 
+    updateManager(peers) 
+    {
+        const me = peers.you;
+        const clients = peers.clients.filter(id => me !== id);
+        clients.forEach(id => {
+            if (!this.peers.has(id)) {
+                const tetris = this.tetrisManager.createPlayer();
+                this.peers.set(id, tetris);
+            }
+        })
+    }
+
 
     receive(msg) 
     {
         const data = JSON.parse(msg);
         if (data.type === 'session-created') {
             window.location.hash = data.id;
+        } else if (data.type === 'session-broadcast') {
+            this.updateManager(data.peers);
         }
     }
 
