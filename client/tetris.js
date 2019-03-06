@@ -11,24 +11,30 @@ class Tetris {
         //console.log(arena); console.table(arena);
         this.player = new Player(this);
 
+        this.player.events.listen('score', score => {
+            this.updateScore(score);
+        });
+
         this.colors = [null, 'red', 'blue', 'violet', 'green',
         'purple', 'orange', 'pink'];
 
         let lastTime = 0;
 
-        const update = (time = 0) => {
+        this._update = (time = 0) => {
             const deltaTime = time - lastTime;
             lastTime = time;
             
             this.player.update(deltaTime);
             this.draw();
-            requestAnimationFrame(update);
-        };
-
-        update();
+            requestAnimationFrame(this._update);
+        };   
         this.updateScore(0);
     }
 
+
+    run() {
+        this._update();
+    }
 
     draw() 
     {
