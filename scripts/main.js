@@ -6,7 +6,7 @@ const matrix = [
 
 function playClearSound() {
 	var sound = new Howl({
-  	src: ['src/clear.mp3']
+  	src: ['audio/clear.mp3']
 });
 sound.play();
 }
